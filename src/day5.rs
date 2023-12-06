@@ -119,7 +119,7 @@ fn problem2(f: &str) -> i64 {
 
                         if remaining.0 > 0 {
                             seeds[i][0] += remaining.0;
-                            seeds[i][1] = seed[1] - remaining.0 ;
+                            seeds[i][1] = seed[1] - remaining.0;
                             new_seeds.push(vec![start_y, remaining.0]);
                         }
 
