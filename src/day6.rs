@@ -70,7 +70,6 @@ fn problem1(f: &str) -> i64 {
 
 fn problem2(f: &str) -> i64 {
     let lines = read_lines(f);
-    let mut result: i64 = 0;
 
     let time: i64 = lines[0]
         .split_terminator(' ')
@@ -88,13 +87,7 @@ fn problem2(f: &str) -> i64 {
         .parse()
         .unwrap();
 
-    for t in 0..=time {
-        if t * (time - t) > distance {
-            result += 1;
-        }
-    }
-
-    result
+    range(time, distance)
 }
 
 pub fn solve() {
