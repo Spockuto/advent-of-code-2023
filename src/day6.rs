@@ -17,28 +17,14 @@ fn roots(t: i64, d: i64) -> (i64, i64) {
     (soln2.floor() as i64, soln1.ceil() as i64)
 }
 
-fn maxima(t: i64) -> (i64, i64) {
-    if t % 2 == 0 {
-        return (t / 2, t / 2);
-    }
-    ((t - 1) / 2, (t + 1) / 2)
-}
-
 fn range(t: i64, d: i64) -> i64 {
     let mut count = 0;
     let root = roots(t, d);
-    let max_t = maxima(t);
 
     if (root.0 * root.1 - d) == 0 {
         count += -2;
     }
-
-    if max_t.0 == max_t.1 {
-        count += root.0 - root.1 + 1;
-    } else {
-        count += root.0 - max_t.1 + max_t.0 - root.1 + 2;
-    }
-
+    count += root.0 - root.1 + 1;
     count
 }
 
