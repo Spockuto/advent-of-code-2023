@@ -1,6 +1,7 @@
 use crate::time_it;
 use crate::utils::read_lines;
 use std::collections::{BTreeSet, HashMap};
+use std::fmt::Debug;
 use std::vec;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -33,7 +34,6 @@ enum Card1 {
 
 impl From<char> for Card1 {
     fn from(c: char) -> Self {
-        
         match c {
             '2' => Card1::Two,
             '3' => Card1::Three,
@@ -72,7 +72,6 @@ enum Card2 {
 
 impl From<char> for Card2 {
     fn from(c: char) -> Self {
-        
         match c {
             '2' => Card2::Two,
             '3' => Card2::Three,
@@ -97,7 +96,7 @@ struct Cards<T>(T, T, T, T, T);
 
 fn get_rank<T>(cards_str: &str, joker: bool) -> Ranks<T>
 where
-    T: std::hash::Hash + std::cmp::Eq + std::cmp::Ord + From<char> + Copy,
+    T: std::hash::Hash + std::cmp::Eq + std::cmp::Ord + From<char> + Copy + Debug,
 {
     let mut cards: Vec<T> = vec![];
     for c in cards_str.chars() {
@@ -110,49 +109,30 @@ where
         *card_counts.entry(card).or_insert(0) += 1;
     }
 
+    if joker {
+        let joker_count = *card_counts.get(&T::from('J')).unwrap_or(&0);
+        if joker_count == 5 {
+            return Ranks::FiveOfAKind(card_tuple);
+        }
+        card_counts.remove_entry(&T::from('J'));
+        let temp = card_counts.clone();
+        let max = temp
+            .iter()
+            .max_by(|a, b| a.1.cmp(b.1))
+            .map(|(k, _v)| k)
+            .unwrap();
+        *card_counts.get_mut(max).unwrap() += joker_count;
+    }
+
     let mut reverse_map: HashMap<i32, BTreeSet<T>> = HashMap::new();
     for (k, v) in card_counts.iter() {
         reverse_map
             .entry(*v)
-            .or_insert(BTreeSet::from([*k]))
+            .or_insert_with(|| BTreeSet::from([*k]))
             .insert(*k);
     }
 
     let count_set = BTreeSet::from_iter(reverse_map.keys());
-    if joker {
-        let joker_count = *card_counts.get(&T::from('J')).unwrap_or(&0);
-        if joker_count == 5
-            || joker_count == 4
-            || (joker_count == 3 && count_set.contains(&2))
-            || (joker_count == 2 && count_set.contains(&3))
-            || (joker_count == 1 && count_set.contains(&4))
-        {
-            return Ranks::FiveOfAKind(card_tuple);
-        }
-
-        if (joker_count == 3 && count_set.contains(&1))
-            || (joker_count == 2 && reverse_map.get(&2).unwrap().len() == 2)
-            || (joker_count == 1 && count_set.contains(&3))
-        {
-            return Ranks::FourOfAKind(card_tuple);
-        }
-
-        if joker_count == 2 && count_set.contains(&3)
-            || (joker_count == 1
-                && count_set.contains(&2)
-                && reverse_map.get(&2).unwrap().len() == 2)
-        {
-            return Ranks::FullHouse(card_tuple);
-        }
-
-        if joker_count == 2 || (joker_count == 1 && count_set.contains(&2)) {
-            return Ranks::ThreeOfAKind(card_tuple);
-        }
-
-        if joker_count == 1 {
-            return Ranks::OnePair(card_tuple);
-        }
-    }
 
     if count_set.len() == 1 {
         if count_set.contains(&1) {
