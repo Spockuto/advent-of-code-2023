@@ -149,18 +149,16 @@ where
             return Ranks::FourOfAKind(card_tuple);
         }
 
-        if count_set.contains(&3) {
-            if count_set.contains(&2) {
-                return Ranks::FullHouse(card_tuple);
-            }
+        if count_set.contains(&3) && count_set.contains(&2) {
+            return Ranks::FullHouse(card_tuple);
+        }
+
+        if count_set.contains(&3) && count_set.contains(&1) {
             return Ranks::ThreeOfAKind(card_tuple);
         }
 
-        if count_set.contains(&2) {
-            let twos = reverse_map.get(&2).unwrap();
-            if twos.len() == 2 {
-                return Ranks::TwoPair(card_tuple);
-            }
+        if count_set.contains(&2) && reverse_map.get(&2).unwrap().len() == 2 {
+            return Ranks::TwoPair(card_tuple);
         }
     }
 
