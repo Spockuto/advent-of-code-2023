@@ -26,11 +26,12 @@ fn problem1(f: &str) -> u64 {
             .chars()
             .nth(result as usize % instructions.len())
             .unwrap();
-        if inst == 'L' {
-            key = map.get(key).unwrap().0;
-        } else {
-            key = map.get(key).unwrap().1;
-        }
+
+        key = match inst {
+            'L' => map.get(key).unwrap().0,
+            'R' => map.get(key).unwrap().1,
+            _ => todo!(),
+        };
         result += 1;
     }
 
@@ -65,11 +66,11 @@ fn problem2(f: &str) -> u64 {
                 .chars()
                 .nth(count as usize % instructions.len())
                 .unwrap();
-            if inst == 'L' {
-                *key = map.get(key).unwrap().0;
-            } else {
-                *key = map.get(key).unwrap().1;
-            }
+            *key = match inst {
+                'L' => map.get(key).unwrap().0,
+                'R' => map.get(key).unwrap().1,
+                _ => todo!(),
+            };
             count += 1;
         }
         counts.push(count);
