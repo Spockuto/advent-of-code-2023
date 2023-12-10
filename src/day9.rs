@@ -9,19 +9,16 @@ fn find_latest(history: Vec<i64>) -> i64 {
     let mut result: i64 = 0;
 
     while count != history.len() {
-        let mut sum: i64 = 0;
-        for (i, value) in history.iter().take(count + 1).enumerate() {
-            let c = count as i64;
-
-            let coeff = binomial(c, i.try_into().unwrap());
-            if i % 2 == 0 {
-                sum += value * coeff;
-            } else {
-                sum += value.neg() * coeff;
-            }
-        }
+        result += history
+            .iter()
+            .rev()
+            .take(count + 1)
+            .enumerate()
+            .map(|(i, value)| value * binomial(count as i64, i.try_into().unwrap()))
+            .enumerate()
+            .map(|(i, value)| if i % 2 == 0 { value } else { value.neg() })
+            .sum::<i64>();
         count += 1;
-        result += sum;
     }
     result
 }
@@ -31,17 +28,16 @@ fn find_first(history: Vec<i64>) -> i64 {
     let mut result: i64 = 0;
 
     while count != history.len() {
-        let mut sum: i64 = 0;
-        for (i, value) in history.iter().take(count + 1).rev().enumerate() {
-            let c = count as i64;
+        let sum = history
+            .iter()
+            .take(count + 1)
+            .rev()
+            .enumerate()
+            .map(|(i, value)| value * binomial(count as i64, i.try_into().unwrap()))
+            .enumerate()
+            .map(|(i, value)| if i % 2 == 0 { value } else { value.neg() })
+            .sum::<i64>();
 
-            let coeff = binomial(c, i.try_into().unwrap());
-            if i % 2 == 0 {
-                sum += value * coeff;
-            } else {
-                sum += value.neg() * coeff;
-            }
-        }
         if count % 2 == 0 {
             result += sum;
         } else {
@@ -63,7 +59,6 @@ fn problem1(f: &str) -> i64 {
                 Ok(value) => Some(value),
                 Err(_) => None,
             })
-            .rev()
             .collect();
         result += find_latest(history);
     }
