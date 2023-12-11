@@ -228,7 +228,7 @@ fn problem2(f: &str) -> i32 {
 }
 
 pub fn solve() {
-    // https://adventofcode.com/2023/day/3
+    // https://adventofcode.com/2023/day/10
     time_it!("Time", let soln = problem1("files/10.txt"));
     println!("Solution for Day 10 problem 1 is {}", soln);
     time_it!("Time", let soln = problem2("files/10.txt"));
