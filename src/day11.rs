@@ -63,7 +63,7 @@ fn problem1(f: &str, expansion_factor: usize) -> u64 {
         *g_j += count;
     }
 
-    for (i, a) in galaxies.clone().iter().enumerate() {
+    for (i, a) in galaxies.iter().enumerate() {
         for b in galaxies.iter().skip(i + 1) {
             let d = distance(*a, *b);
             result += d as u64;
