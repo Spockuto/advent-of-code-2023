@@ -1,7 +1,7 @@
-use indexmap::IndexMap;
-
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
+use indexmap::IndexMap;
 
 #[derive(Debug, Default)]
 struct Label<'a> {

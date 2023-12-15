@@ -1,8 +1,8 @@
-use std::ops::Neg;
-
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 use num_integer::binomial;
+use std::ops::Neg;
 
 fn find_latest(history: Vec<i64>) -> i64 {
     let mut count: usize = 0;

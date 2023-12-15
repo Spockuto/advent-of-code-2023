@@ -1,5 +1,6 @@
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 
 fn problem1(f: &str) -> u64 {
     let lines = read_lines(f);

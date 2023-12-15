@@ -1,3 +1,4 @@
+use colored::Colorize;
 use std::iter::zip;
 use std::ops::AddAssign;
 
@@ -83,7 +84,7 @@ fn problem1(f: &str, smudge: bool) -> usize {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/13
-    time_it!(13, 2, problem1("files/13.txt", false));
+    time_it!(13, 1, problem1("files/13.txt", false));
     time_it!(13, 2, problem1("files/13.txt", true));
 }
 

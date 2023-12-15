@@ -1,5 +1,6 @@
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 
 fn find_load_once(mirror: Vec<Vec<u8>>) -> u64 {
     let length = mirror.len();

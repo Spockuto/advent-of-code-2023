@@ -1,5 +1,6 @@
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 
 type PartPosition = Vec<(u64, (usize, usize), (usize, usize))>;
 fn problem1(f: &str) -> u64 {

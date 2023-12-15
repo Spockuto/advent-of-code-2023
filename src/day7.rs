@@ -1,5 +1,6 @@
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 use std::collections::{BTreeSet, HashMap};
 use std::fmt::Debug;
 use std::vec;

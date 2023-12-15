@@ -1,8 +1,8 @@
-use std::collections::HashMap;
-
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
 use num_integer::Integer;
+use std::collections::HashMap;
 
 fn problem1(f: &str) -> u64 {
     let lines = read_lines(f);

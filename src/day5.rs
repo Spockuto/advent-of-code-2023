@@ -1,3 +1,4 @@
+use colored::Colorize;
 use std::{collections::HashMap, vec};
 
 use crate::time_it;

@@ -1,7 +1,7 @@
-use std::collections::BTreeSet;
-
 use crate::time_it;
 use crate::utils::read_lines;
+use colored::Colorize;
+use std::collections::BTreeSet;
 
 fn distance(a: (usize, usize), b: (usize, usize)) -> usize {
     let x = a.0.abs_diff(b.0);

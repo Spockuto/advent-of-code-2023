@@ -16,6 +16,8 @@ mod day9;
 mod utils;
 
 fn main() {
+    println!("❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄ Advent of Code 2023 ❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄❄");
+    println!("┌────────────┬──────────────────────┬───────────────────┐");
     day1::solve();
     day2::solve();
     day3::solve();
