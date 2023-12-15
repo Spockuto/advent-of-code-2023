@@ -229,10 +229,8 @@ fn problem2(f: &str) -> i32 {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/10
-    time_it!("Time", let soln = problem1("files/10.txt"));
-    println!("Solution for Day 10 problem 1 is {}", soln);
-    time_it!("Time", let soln = problem2("files/10.txt"));
-    println!("Solution for Day 10 problem 2 is {}", soln);
+    time_it!(10, 1, problem1("files/10.txt"));
+    time_it!(10, 2, problem2("files/10.txt"));
 }
 
 mod tests {

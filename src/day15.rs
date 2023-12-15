@@ -86,10 +86,8 @@ fn problem2(f: &str) -> usize {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/15
-    time_it!("Time", let soln = problem1("files/15.txt"));
-    println!("Solution for Day 15 problem 1 is {}", soln);
-    time_it!("Time", let soln = problem2("files/15.txt"));
-    println!("Solution for Day 15 problem 2 is {}", soln);
+    time_it!(15, 1, problem1("files/15.txt"));
+    time_it!(15, 2, problem2("files/15.txt"));
 }
 
 mod tests {

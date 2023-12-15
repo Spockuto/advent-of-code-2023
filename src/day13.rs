@@ -83,10 +83,8 @@ fn problem1(f: &str, smudge: bool) -> usize {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/13
-    time_it!("Time", let soln = problem1("files/13.txt", false));
-    println!("Solution for Day 13 problem 1 is {}", soln);
-    time_it!("Time", let soln = problem1("files/13.txt", true));
-    println!("Solution for Day 13 problem 2 is {}", soln);
+    time_it!(13, 2, problem1("files/13.txt", false));
+    time_it!(13, 2, problem1("files/13.txt", true));
 }
 
 mod tests {

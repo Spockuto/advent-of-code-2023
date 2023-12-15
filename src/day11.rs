@@ -75,10 +75,8 @@ fn problem1(f: &str, expansion_factor: usize) -> u64 {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/11
-    time_it!("Time", let soln = problem1("files/11.txt", 2));
-    println!("Solution for Day 11 problem 1 is {}", soln);
-    time_it!("Time", let soln = problem1("files/11.txt", 1_000_000));
-    println!("Solution for Day 11 problem 2 is {}", soln);
+    time_it!(11, 1, problem1("files/11.txt", 2));
+    time_it!(11, 2, problem1("files/11.txt", 1_000_000));
 }
 
 mod tests {

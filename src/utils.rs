@@ -1,3 +1,4 @@
+use colored::Colorize;
 use std::fs::read_to_string;
 
 pub(crate) fn read_lines(filename: &str) -> Vec<String> {
@@ -10,9 +11,16 @@ pub(crate) fn read_lines(filename: &str) -> Vec<String> {
 
 #[macro_export]
 macro_rules! time_it {
-    ($context:literal, $s:stmt) => {
+    ($day:expr, $problem:expr, $s:expr) => {
         let timer = std::time::Instant::now();
-        $s
-        println!("{}: {:?}", $context, timer.elapsed());
+        let soln = $s;
+        //let day = $day.to_string().as_str();
+        println!(
+            "Solution for Day {:>2} problem {} is {:<14} Time: {:?}",
+            stringify!($day),
+            $problem,
+            soln,
+            timer.elapsed()
+        );
     };
 }

@@ -71,10 +71,8 @@ fn problem2(f: &str) -> u64 {
 
 pub fn solve() {
     // https://adventofcode.com/2023/day/1
-    time_it!("Time", let soln = problem1("files/1.txt"));
-    println!("Solution for Day 1 problem 1 is {}", soln);
-    time_it!("Time", let soln = problem2("files/1.txt"));
-    println!("Solution for Day 1 problem 2 is {}", soln);
+    time_it!(1, 1, problem1("files/1.txt"));
+    time_it!(1, 2, problem2("files/1.txt"));
 }
 
 mod tests {
