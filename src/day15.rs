@@ -3,45 +3,44 @@ use indexmap::IndexMap;
 use crate::time_it;
 use crate::utils::read_lines;
 
-#[derive(Debug, Clone, Default)]
-struct Label {
-    label: String,
+#[derive(Debug, Default)]
+struct Label<'a> {
+    label: &'a str,
     hash: usize,
     focal_length: Option<u64>,
     op: Operation,
 }
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Default)]
 enum Operation {
     #[default]
     Equal,
     Sub,
 }
 
-impl From<&str> for Label {
-    fn from(s: &str) -> Self {
-        let mut ret: Label = Default::default();
+impl<'a> From<&'a str> for Label<'a> {
+    fn from(s: &'a str) -> Self {
         for (i, c) in s.chars().enumerate() {
             if c == '=' {
-                ret = Label {
-                    label: String::from(&s[..i]),
+                return Self {
+                    label: &s[..i],
                     hash: calculate_hash(&s[..i]) as usize,
                     focal_length: Some(s[(i + 1)..].parse::<u64>().unwrap()),
                     op: Operation::Equal,
                 };
-                break;
             }
 
             if c == '-' {
-                ret = Label {
-                    label: String::from(&s[..i]),
+                return Self {
+                    label: &s[..i],
                     hash: calculate_hash(&s[..i]) as usize,
                     focal_length: None,
                     op: Operation::Sub,
                 };
-                break;
             }
         }
-        ret
+        Self {
+            ..Default::default()
+        }
     }
 }
 
@@ -49,7 +48,7 @@ fn calculate_hash(s: &str) -> u64 {
     let mut start: u64 = 0;
 
     for c in s.chars() {
-        start = (((start + c as u64) << 4) + (start + c as u64)) & 255;
+        start = ((start + c as u64) * 17) % 256;
     }
     start
 }
@@ -62,32 +61,24 @@ fn problem1(f: &str) -> u64 {
 
 fn problem2(f: &str) -> usize {
     let lines = read_lines(f);
-    let mut boxes: Vec<IndexMap<String, u64>> = vec![IndexMap::new(); 256];
+    let mut boxes: Vec<IndexMap<&str, u64>> = vec![IndexMap::new(); 256];
     let mut result = 0;
 
-    for x in lines[0].split(',') {
-        let label = Label::from(x);
+    for l in lines[0].split(',') {
+        let label = Label::from(l);
         match label.op {
             Operation::Equal => {
-                if boxes[label.hash].contains_key(&label.label) {
-                    boxes[label.hash][&label.label] = label.focal_length.unwrap();
-                } else {
-                    boxes[label.hash].insert(label.label, label.focal_length.unwrap());
-                }
+                boxes[label.hash].insert(label.label, label.focal_length.unwrap());
             }
             Operation::Sub => {
-                if boxes[label.hash].contains_key(&label.label) {
-                    boxes[label.hash].shift_remove(&label.label);
-                }
+                boxes[label.hash].shift_remove(&label.label);
             }
         }
     }
 
     for (i, b) in boxes.iter().enumerate() {
-        if !b.is_empty() {
-            for (j, (_, f)) in b.iter().enumerate() {
-                result += (i + 1) * (j + 1) * *f as usize;
-            }
+        for (j, (_, f)) in b.iter().enumerate() {
+            result += (i + 1) * (j + 1) * *f as usize;
         }
     }
     result
