@@ -28,10 +28,8 @@ fn reflection(nums: Vec<u64>, smudge: bool) -> usize {
             if temp.count_ones() == 1 && smudge_count == 0 {
                 mirror = i;
             }
-        } else {
-            if temp == 0 {
-                mirror = i;
-            }
+        } else if temp == 0 {
+            mirror = i;
         }
     }
     mirror
@@ -54,9 +52,9 @@ fn find_mirror(mirror: Vec<String>, smudge: bool) -> Reflection {
                 if j == 0 {
                     rows.push(0);
                 } else {
-                    rows[i] = rows[i] << 1;
+                    rows[i] <<= 1;
                 }
-                columns[j] = columns[j] << 1;
+                columns[j] <<= 1;
             }
         }
     }

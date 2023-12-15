@@ -73,7 +73,7 @@ fn find_load(mirror: Vec<Vec<u8>>, count: usize) -> u64 {
             for (j, c) in line.iter().enumerate() {
                 if *c == 1 {
                     spin[last_seen[j]][j] = 1;
-                    last_seen[j] -= 1;
+                    last_seen[j] = last_seen[j].saturating_sub(1);
                 }
 
                 if mirror[rows - 1 - i][j] == 2 {
@@ -90,7 +90,7 @@ fn find_load(mirror: Vec<Vec<u8>>, count: usize) -> u64 {
             for (j, c) in line.iter().rev().enumerate() {
                 if *c == 1 {
                     spin[i][last_seen[i]] = 1;
-                    last_seen[i] -= 1;
+                    last_seen[i] = last_seen[i].saturating_sub(1);
                 }
 
                 if mirror[i][columns - 1 - j] == 2 {
@@ -127,8 +127,6 @@ fn problem1(f: &str) -> u64 {
                 grid[i][j] = 1;
             } else if c == '#' {
                 grid[i][j] = 2;
-            } else {
-                ()
             }
         }
     }
@@ -145,8 +143,6 @@ fn problem2(f: &str) -> u64 {
                 grid[i][j] = 1;
             } else if c == '#' {
                 grid[i][j] = 2;
-            } else {
-                ()
             }
         }
     }
