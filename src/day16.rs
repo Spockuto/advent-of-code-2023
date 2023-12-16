@@ -14,17 +14,31 @@ enum Direction {
 
 #[derive(Debug, Clone)]
 enum Operation {
-    Pass(Direction, (usize, usize)),
-    Turn(Direction, (usize, usize)),
-    Split(Direction, (usize, usize), Direction, (usize, usize)),
+    Pass(Direction, (Option<usize>, Option<usize>)),
+    Turn(Direction, (Option<usize>, Option<usize>)),
+    Split(
+        Direction,
+        (Option<usize>, Option<usize>),
+        Direction,
+        (Option<usize>, Option<usize>),
+    ),
 }
 
 fn operation(c: char, d: Direction, x: usize, y: usize, max_x: usize, max_y: usize) -> Operation {
-    let up = (x.saturating_sub(1), y);
-    let down = ((x + 1).min(max_x - 1), y);
-    let left = (x, y.saturating_sub(1));
-    let right = (x, (y + 1).min(max_y - 1));
+    let down = if x + 1 < max_x {
+        (Some(x + 1), Some(y))
+    } else {
+        (None, Some(y))
+    };
 
+    let right = if y + 1 < max_y {
+        (Some(x), Some(y + 1))
+    } else {
+        (Some(x), None)
+    };
+
+    let up = (x.checked_sub(1), Some(y));
+    let left = (Some(x), y.checked_sub(1));
     if c == '.' {
         return match d {
             Direction::Up => Operation::Pass(Direction::Up, up),
@@ -86,26 +100,35 @@ fn problem1(f: &str) -> u64 {
         for dir in grid[x][y].clone().iter() {
             match operation(lines[x].chars().nth(y).unwrap(), *dir, x, y, rows, columns) {
                 Operation::Pass(d, coord) => {
-                    if !grid[coord.0][coord.1].contains(&d) {
-                        grid[coord.0][coord.1].insert(d);
-                        to_process.push(coord);
-                    }
+                    if let (Some(x), Some(y)) = coord {
+                        if !grid[x][y].contains(&d) {
+                            grid[x][y].insert(d);
+                            to_process.push((x, y));
+                        }
+                    };
                 }
                 Operation::Turn(d, coord) => {
-                    if !grid[coord.0][coord.1].contains(&d) {
-                        grid[coord.0][coord.1].insert(d);
-                        to_process.push(coord);
-                    }
+                    if let (Some(x), Some(y)) = coord {
+                        if !grid[x][y].contains(&d) {
+                            grid[x][y].insert(d);
+                            to_process.push((x, y));
+                        }
+                    };
                 }
                 Operation::Split(d1, d1_coord, d2, d2_coord) => {
-                    if !grid[d1_coord.0][d1_coord.1].contains(&d1) {
-                        grid[d1_coord.0][d1_coord.1].insert(d1);
-                        to_process.push(d1_coord);
-                    }
-                    if !grid[d2_coord.0][d2_coord.1].contains(&d2) {
-                        grid[d2_coord.0][d2_coord.1].insert(d2);
-                        to_process.push(d2_coord);
-                    }
+                    if let (Some(x), Some(y)) = d1_coord {
+                        if !grid[x][y].contains(&d1) {
+                            grid[x][y].insert(d1);
+                            to_process.push((x, y));
+                        }
+                    };
+
+                    if let (Some(x), Some(y)) = d2_coord {
+                        if !grid[x][y].contains(&d2) {
+                            grid[x][y].insert(d2);
+                            to_process.push((x, y));
+                        }
+                    };
                 }
             }
         }
@@ -140,34 +163,43 @@ fn problem2(f: &str) -> u64 {
     }
 
     for (start, i, j) in surroundings.iter() {
-        let mut grid: Vec<Vec<Vec<Direction>>> = vec![vec![vec![]; columns]; rows];
+        let mut grid: Vec<Vec<HashSet<Direction>>> = vec![vec![HashSet::new(); columns]; rows];
         let mut to_process: Vec<(usize, usize)> = vec![(*i, *j)];
-        grid[*i][*j].push(*start);
+        grid[*i][*j].insert(*start);
 
         while let Some((x, y)) = to_process.pop() {
             for dir in grid[x][y].clone().iter() {
                 match operation(lines[x].chars().nth(y).unwrap(), *dir, x, y, rows, columns) {
                     Operation::Pass(d, coord) => {
-                        if !grid[coord.0][coord.1].contains(&d) {
-                            grid[coord.0][coord.1].push(d);
-                            to_process.push(coord);
-                        }
+                        if let (Some(x), Some(y)) = coord {
+                            if !grid[x][y].contains(&d) {
+                                grid[x][y].insert(d);
+                                to_process.push((x, y));
+                            }
+                        };
                     }
                     Operation::Turn(d, coord) => {
-                        if !grid[coord.0][coord.1].contains(&d) {
-                            grid[coord.0][coord.1].push(d);
-                            to_process.push(coord);
-                        }
+                        if let (Some(x), Some(y)) = coord {
+                            if !grid[x][y].contains(&d) {
+                                grid[x][y].insert(d);
+                                to_process.push((x, y));
+                            }
+                        };
                     }
                     Operation::Split(d1, d1_coord, d2, d2_coord) => {
-                        if !grid[d1_coord.0][d1_coord.1].contains(&d1) {
-                            grid[d1_coord.0][d1_coord.1].push(d1);
-                            to_process.push(d1_coord);
-                        }
-                        if !grid[d2_coord.0][d2_coord.1].contains(&d2) {
-                            grid[d2_coord.0][d2_coord.1].push(d2);
-                            to_process.push(d2_coord);
-                        }
+                        if let (Some(x), Some(y)) = d1_coord {
+                            if !grid[x][y].contains(&d1) {
+                                grid[x][y].insert(d1);
+                                to_process.push((x, y));
+                            }
+                        };
+
+                        if let (Some(x), Some(y)) = d2_coord {
+                            if !grid[x][y].contains(&d2) {
+                                grid[x][y].insert(d2);
+                                to_process.push((x, y));
+                            }
+                        };
                     }
                 }
             }
